@@ -1,0 +1,52 @@
+---
+version: "3"
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-data:/data/db
+
+  config-server:
+    image: hochschulejz/config-server:latest
+    container_name: config-server
+    pull_policy: always
+    healthcheck:
+      test: "exit 0"
+    ports:
+      - "8888:8888"
+
+  discovery-service:
+    image: hochschulejz/discovery-service:latest
+    container_name: discovery-service
+    pull_policy: always
+    ports:
+      - "8761:8761"
+    depends_on:
+      config-server:
+        condition: service_healthy
+
+  api-gateway:
+    image: hochschulejz/api-gateway:latest
+    container_name: api-gateway
+    pull_policy: always
+    environment:
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY=TRACE
+    ports:
+      - "8080:8080"
+    depends_on:
+      - config-server
+      - discovery-service
+
+  sensor-service:
+    image: hochschulejz/sensor-service:latest
+    container_name: sensor-service
+    pull_policy: always
+    depends_on:
+      - mongo
+      - config-server
+      - discovery-service
+      - api-gateway
