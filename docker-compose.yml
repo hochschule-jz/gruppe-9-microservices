@@ -41,9 +41,9 @@ services:
       - config-server
       - discovery-service
 
-  sensor-service:
-    image: hochschulejz/sensor-service:latest
-    container_name: sensor-service
+  hotel-service:
+    image: hochschulejz/hotel-service:latest
+    container_name: hotel-service
     pull_policy: always
     depends_on:
       - mongo

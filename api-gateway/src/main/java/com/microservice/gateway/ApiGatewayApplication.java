@@ -15,15 +15,16 @@ public class ApiGatewayApplication {
     }
 
     /**
-     * Constructs necessary routes for sensors and measurements and enables load-balancing
+     * Constructs the necessary routes and enables load-balancing
      * @param builder Used to create the routes
      * @return Available routes of application which use load-balancing
      */
     @Bean
     public RouteLocator routeLocator(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("sensor-route", r -> r.path("/api/sensors/**").uri("lb://sensor-service"))
-                .route("measurement-route", r -> r.path("/api/measurements/**").uri("lb://sensor-service"))
+                .route("guest-route", r -> r.path("/api/guests/**").filters(f -> f.stripPrefix(1)).uri("lb://hotel-service"))
+                .route("room-route", r -> r.path("/api/rooms/**").filters(f -> f.stripPrefix(1)).uri("lb://hotel-service"))
+                .route("booking-route", r -> r.path("/api/bookings/**").filters(f -> f.stripPrefix(1)).uri("lb://hotel-service"))
                 .build();
     }
 }
