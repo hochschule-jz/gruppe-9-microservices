@@ -1,0 +1,58 @@
+<div class="booking-wrapper">
+  <div class="booking-card">
+    <div class="card-header">
+      <h2>🏨 New Reservation</h2>
+      <p>Select a guest and room to confirm booking</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #bookingForm="ngForm" class="booking-form">
+
+      <div class="form-group">
+        <label for="guest">Guest</label>
+        <div class="select-wrapper">
+          <select id="guest" [(ngModel)]="bookingData.guestId" name="guestId" required>
+            <option value="" disabled selected>-- Select a Guest --</option>
+            <option *ngFor="let guest of guests" [value]="guest.id">
+              {{ guest.firstName }} {{ guest.lastName}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="room">Room</label>
+        <div class="select-wrapper">
+          <select id="room" [(ngModel)]="bookingData.roomId" name="roomId" required>
+            <option value="" disabled selected>-- Select a Room --</option>
+            <option *ngFor="let room of rooms" [value]="room.id" [disabled]="!room.available">
+              Room {{ room.roomNumber }} ({{ room.type }}) - ${{ room.pricePerNight }}
+              {{ !room.available ? '(Occupied)' : '' }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half-width">
+          <label for="checkIn">Check-In</label>
+          <input type="date" id="checkIn" [(ngModel)]="bookingData.checkInDate" name="checkIn" required>
+        </div>
+
+        <div class="form-group half-width">
+          <label for="checkOut">Check-Out</label>
+          <input type="date" id="checkOut" [(ngModel)]="bookingData.checkOutDate" name="checkOut" required>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="!bookingForm.valid" class="submit-btn">
+        Confirm Booking
+      </button>
+
+    </form>
+
+    <div *ngIf="message" class="status-banner" [ngClass]="{'error': isError, 'success': !isError}">
+      <span class="icon">{{ isError ? '❌' : '✅' }}</span>
+      <span>{{ message }}</span>
+    </div>
+  </div>
+</div>

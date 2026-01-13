@@ -31,3 +31,45 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Compiled output
+/booking-ui/dist
+/booking-ui/tmp
+/booking-ui/out-tsc
+/booking-ui/bazel-out
+
+# Node
+/booking-ui/node_modules
+/booking-ui/npm-debug.log
+/booking-ui/yarn-error.log
+
+# IDEs and editors
+/booking-ui/.idea/
+/booking-ui/.project
+/booking-ui/.classpath
+/booking-ui/.c9/
+/booking-ui/*.launch
+/booking-ui/.settings/
+/booking-ui/*.sublime-workspace
+
+# Visual Studio Code
+/booking-ui/.vscode/*
+/booking-ui/!.vscode/settings.json
+/booking-ui/!.vscode/tasks.json
+/booking-ui/!.vscode/launch.json
+/booking-ui/!.vscode/extensions.json
+/booking-ui/.history/*
+
+# Miscellaneous
+/booking-ui/.angular/cache
+/booking-ui/.sass-cache/
+/booking-ui/connect.lock
+/booking-ui/coverage
+/booking-ui/libpeerconnection.log
+/booking-ui/testem.log
+/booking-ui/typings
+/booking-ui/__screenshots__/
+
+# System files
+/booking-ui/.DS_Store
+/booking-ui/Thumbs.db
