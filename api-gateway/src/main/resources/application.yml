@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: room-service
+          uri: lb://room-service
+          predicates:
+            - Path=/rooms/**
+        - id: guest-service
+          uri: lb://guest-service
+          predicates:
+            - Path=/guests/**
+        - id: booking-service
+          uri: lb://booking-service
+          predicates:
+            - Path=/bookings/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

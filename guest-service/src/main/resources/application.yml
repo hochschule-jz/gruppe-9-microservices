@@ -1,0 +1,14 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: guest-service
+  data:
+    mongodb:
+      uri: mongodb://mongodb-guest:27017/guestdb
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/

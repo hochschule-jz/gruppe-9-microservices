@@ -1,5 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example.booking</groupId>
+    <artifactId>booking-platform</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>room-service</module>
+        <module>guest-service</module>
+        <module>booking-service</module>
+        <module>discovery-service</module>
+        <module>config-server</module>
+        <module>api-gateway</module>
+    </modules>
+    <properties>
+    <java.version>17</java.version>
+    <spring-boot.version>3.2.1</spring-boot.version>
+    <spring-cloud.version>2023.0.0</spring-cloud.version>
+    <jib.version>3.4.0</jib.version>
+    <dockerhub.username>hochschulejz </dockerhub.username>
+</properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -8,48 +31,34 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.microservice</groupId>
-    <artifactId>gruppe-9-microservices</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
-
-    <modules>
-        <module>api-gateway</module>
-        <module>config-server</module>
-        <module>discovery-service</module>
-        <module>hotel-service</module>
-    </modules>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-cloud.version>2023.0.0</spring-cloud.version>
-    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>3.3.2</version>
-                <configuration>
-                    <from>
-                        <image>eclipse-temurin:18.0.2_9-jre</image>
-                    </from>
-                    <to>
-                        <image>registry.hub.docker.com/hochschulejz/${project.artifactId}</image>
-                    </to>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <release>18</release>
-                </configuration>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>${jib.version}</version>
+                    <configuration>
+                        <from><image>eclipse-temurin:17-jre-alpine</image></from>
+                        <to>
+                            <image>docker.io/${dockerhub.username}/${project.artifactId}</image>
+                            <tags><tag>latest</tag></tags>
+                        </to>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
-
 </project>

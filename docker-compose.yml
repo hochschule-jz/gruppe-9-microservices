@@ -1,52 +1,109 @@
----
-version: "3"
-services:
-  mongo:
-    container_name: mongo
-    image: mongo:latest
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./mongo-data:/data/db
+version: '3.8'
 
-  config-server:
-    image: hochschulejz/config-server:latest
-    container_name: config-server
-    pull_policy: always
-    healthcheck:
-      test: "exit 0"
-    ports:
-      - "8888:8888"
+services:
+  # ==========================================
+  # 1. INFRASTRUCTURE SERVICES
+  # ==========================================
 
   discovery-service:
-    image: hochschulejz/discovery-service:latest
+    build: ./discovery-service
     container_name: discovery-service
-    pull_policy: always
     ports:
       - "8761:8761"
+    environment:
+      - EUREKA_CLIENT_REGISTER_WITH_EUREKA=false
+      - EUREKA_CLIENT_FETCH_REGISTRY=false
+
+  config-server:
+    build: ./config-server
+    container_name: config-server
+    ports:
+      - "8888:8888"
     depends_on:
-      config-server:
-        condition: service_healthy
+      - discovery-service
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
 
   api-gateway:
-    image: hochschulejz/api-gateway:latest
+    build: ./api-gateway
     container_name: api-gateway
-    pull_policy: always
-    environment:
-      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY=TRACE
     ports:
       - "8080:8080"
     depends_on:
-      - config-server
       - discovery-service
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+      - SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED=true
 
-  hotel-service:
-    image: hochschulejz/hotel-service:latest
-    container_name: hotel-service
-    pull_policy: always
+  # ==========================================
+  # 2. DATABASES (MongoDB)
+  # ==========================================
+
+  mongodb-room:
+    image: mongo:latest
+    container_name: mongodb-room
+    ports:
+      - "27017:27017"
+    volumes:
+      - room-data:/data/db
+
+  mongodb-guest:
+    image: mongo:latest
+    container_name: mongodb-guest
+    ports:
+      - "27018:27017"
+    volumes:
+      - guest-data:/data/db
+
+  mongodb-booking:
+    image: mongo:latest
+    container_name: mongodb-booking
+    ports:
+      - "27019:27017"
+    volumes:
+      - booking-data:/data/db
+
+  # ==========================================
+  # 3. DOMAIN MICROSERVICES
+  # ==========================================
+
+  room-service:
+    build: ./room-service
+    container_name: room-service
+    ports:
+      - "8081:8081"
     depends_on:
-      - mongo
-      - config-server
       - discovery-service
-      - api-gateway
+      - mongodb-room
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb-room:27017/roomdb
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+
+  guest-service:
+    build: ./guest-service
+    container_name: guest-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - discovery-service
+      - mongodb-guest
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb-guest:27017/guestdb
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+
+  booking-service:
+    build: ./booking-service
+    container_name: booking-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - discovery-service
+      - mongodb-booking
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb-booking:27017/bookingdb
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
+
+volumes:
+  room-data:
+  guest-data:
+  booking-data:

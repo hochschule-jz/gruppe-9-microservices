@@ -1,0 +1,14 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: booking-service
+  data:
+    mongodb:
+      uri: mongodb://mongodb-booking:27017/bookingdb
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
