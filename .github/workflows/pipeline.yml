@@ -47,7 +47,7 @@ jobs:
           push: true
           tags: |
             ${{ secrets.REGISTRY_USERNAME }}/${{ matrix.service }}:latest
-            ${{ secrets.REGISTRY_PASSWORD }}/${{ matrix.service }}:${{ github.sha }}
+            ${{ secrets.REGISTRY_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
 
       # 4. Generate SBOM using Syft
       - name: Generate SBOM
