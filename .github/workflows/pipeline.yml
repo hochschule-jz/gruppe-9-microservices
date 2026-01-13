@@ -36,8 +36,8 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
 
       # 3. Build and Push Docker Image
       - name: Build and Push Docker Image
@@ -46,14 +46,14 @@ jobs:
           context: ./${{ matrix.service }}
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
+            ${{ secrets.REGISTRY_USERNAME }}/${{ matrix.service }}:latest
+            ${{ secrets.REGISTRY_PASSWORD }}/${{ matrix.service }}:${{ github.sha }}
 
       # 4. Generate SBOM using Syft
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
+          image: ${{ secrets.REGISTRY_USERNAME }}/${{ matrix.service }}:latest
           format: spdx-json
           output-file: ${{ matrix.service }}-sbom.spdx.json
 
