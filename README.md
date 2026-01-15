@@ -57,14 +57,21 @@ The entire platform runs via Docker Compose.
 1.  **Prerequisites**
    * Install Docker Desktop.
    * Ensure ports `8080`, `4200`, `8761`, and `27017-27019` are free.
+   * Java 17 (JDK)
 
-2.  **Start the System**
+2.  **Build the JARs**
+    Open a terminal in the project root and run:
+    ```bash
+    ./mvnw clean package -DskipTests
+    ```
+
+3.  **Start the System**
     Open a terminal in the project root and run:
     ```bash
     docker compose up -d --build
     ```
 
-3.  **Verify & Access**
+4.  **Verify & Access**
    * **Frontend (UI):** [http://localhost:4200](http://localhost:4200)
    * **API Gateway:** [http://localhost:8080](http://localhost:8080)
    * **Eureka Dashboard:** [http://localhost:8761](http://localhost:8761)
