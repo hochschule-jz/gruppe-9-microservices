@@ -5,10 +5,9 @@ FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
 # Copy the built JAR file into the image
-# (Assumes you run 'mvn package' before building docker)
 COPY target/*.jar app.jar
 
-# Expose the port (Optional, for documentation)
+# Expose the port
 EXPOSE 8080
 
 # Command to run the app

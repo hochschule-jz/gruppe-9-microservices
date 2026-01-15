@@ -12,12 +12,10 @@ public class RoomController {
 
     private final RoomRepository roomRepository;
 
-    // --- MISSING ENDPOINT: Create Room ---
     @PostMapping
     public Room createRoom(@RequestBody Room room) {
         return roomRepository.save(room);
     }
-    // -------------------------------------
 
     @GetMapping("/{id}")
     public Room getRoom(@PathVariable String id) {

@@ -1,59 +1,47 @@
-# BookingUi
+# 🏨 Hotel Booking Platform - Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.5.
+This is the user interface for the Hotel Booking Microservices Platform. It is built with **Angular** and designed to interact with the backend services via the API Gateway.
 
-## Development server
+The application allows users to manage guests, rooms, and perform bookings with real-time validation and error handling.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## 🚀 Features
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### 1. Booking Management (Home)
+* **Booking Process:** Select a Guest and a Room to create a booking.
+* **Saga Pattern Feedback:** The UI handles complex distributed transaction errors.
+  * *Example:* If a guest named "BadPayer" tries to book, the backend rolls back the transaction, and the UI displays the specific error: `❌ Transaction Failed: Payment Rejected`.
+* **Availability:** Automatically updates room availability after a successful booking.
 
-## Code scaffolding
+### 2. Guest Management
+* **Create Guests:** Registration form with strict validation.
+  * **Email:** Validates format (Angular built-in).
+  * **Phone:** Validates international formats using Regex: `^[0-9+\s()-]{7,15}$`.
+* **Directory:** Lists all guests.
+  * Displays "No email/phone provided" placeholders for legacy data.
+  * Visual status badges for missing contact info.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 3. Room Management
+* **Inventory Control:** Create new rooms with Types (e.g., "Deluxe") and Prices.
+* **Status Tracking:** Visual indicators for `Available` vs `Booked` rooms.
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🛠️ Technology Stack
 
-```bash
-ng generate --help
-```
+* **Framework:** Angular (Standalone Components)
+* **Styling:** CSS3 (Flexbox, Card Layouts, Responsive Design)
+* **State Management:** RxJS (Observables)
+* **Production Server:** Nginx (via Docker)
 
-## Building
+---
 
-To build the project run:
+## 🏃‍♂️ How to Run
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### Option 1: Via Docker (Recommended)
+This frontend is part of the main `docker-compose.yml`. It runs automatically when you start the full platform.
 
 ```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+# From the project root
+docker compose up -d --build

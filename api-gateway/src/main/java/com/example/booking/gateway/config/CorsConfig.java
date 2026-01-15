@@ -16,16 +16,16 @@ public class CorsConfig {
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfig = new CorsConfiguration();
 
-        // 1. Allow your Angular Frontend
+        // 1. Allow Angular Frontend
         corsConfig.setAllowedOrigins(List.of("http://localhost:4200"));
 
-        // 2. Allow specific HTTP methods (or all)
-        corsConfig.addAllowedMethod("*"); // GET, POST, PUT, DELETE, OPTIONS
+        // 2. Allow all HTTP methods
+        corsConfig.addAllowedMethod("*");
 
-        // 3. Allow headers (Content-Type, etc.)
+        // 3. Allow all headers
         corsConfig.addAllowedHeader("*");
 
-        // 4. Register this config for all routes
+        // 4. Register config for all routes
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
 

@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   # ==========================================================
-  # JOB 1: BACKEND SERVICES (Matrix Strategy)
+  # JOB 1: BACKEND SERVICES
   # ==========================================================
   build-and-scan-backend:
     runs-on: ubuntu-latest

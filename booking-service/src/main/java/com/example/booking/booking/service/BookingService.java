@@ -34,7 +34,7 @@ public class BookingService {
 
         try {
             // 3. PAYMENT (Mock External Payment Service)
-            // Simulating a failure for a specific guest lastName (e.g., "BadPayer")
+            // Simulating a failure for a guest with specific lastname (e.g. "BadPayer")
             if ("BadPayer".equalsIgnoreCase(guest.getLastName())) {
                 throw new RuntimeException("Payment Rejected: Insufficient Funds");
             }
@@ -52,7 +52,7 @@ public class BookingService {
             return "Booking Confirmed!";
 
         } catch (Exception e) {
-            // *** ROLLBACK (COMPENSATING TRANSACTION) ***
+            // *** ROLLBACK ***
             System.err.println("Error during booking: " + e.getMessage());
             System.err.println("Rolling back room reservation for Room ID: " + request.getRoomId());
 
