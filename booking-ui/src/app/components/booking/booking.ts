@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 import { BookingService, BookingRequest, Guest, Room } from '../../services/booking.service';
 
 @Component({
@@ -29,6 +30,7 @@ export class BookingComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.setDefaultDates();
   }
 
   loadData() {
@@ -44,22 +46,57 @@ export class BookingComponent implements OnInit {
     });
   }
 
+  setDefaultDates() {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    this.bookingData.checkInDate = today.toISOString().split('T')[0];
+    this.bookingData.checkOutDate = tomorrow.toISOString().split('T')[0];
+  }
+
   onSubmit() {
+    // 1. Reset Status
     this.message = 'Processing...';
     this.isError = false;
 
+    // 2. Send Request
     this.bookingService.createBooking(this.bookingData).subscribe({
-      next: (response) => {
-        console.log(response.message);
-        this.message = response.message || 'Booking Successful!';
+      next: (response: any) => {
+        console.log('Success:', response);
+
+        // Handle response whether it's a simple string or a JSON object
+        this.message = response.message || response || 'Booking Successful!';
         this.isError = false;
-        // Refresh rooms to update availability status
+
+        // Refresh rooms
         this.loadData();
+
+        // Optional: clear selection but keep dates
+        this.bookingData.guestId = '';
+        this.bookingData.roomId = '';
+
         this.cdr.detectChanges();
       },
-      error: (error) => {
+      error: (error: HttpErrorResponse) => {
+        console.error('Error:', error);
         this.isError = true;
-        this.message = error.error.error || 'Transaction Failed & Rolled Back!';
+
+        // 3. ROBUST ERROR EXTRACTION
+        // Priority 1: Custom backend error message (e.g. "Transaction Failed...")
+        if (error.error && error.error.error) {
+          this.message = error.error.error;
+        }
+        // Priority 2: Standard Spring Boot "message" field
+        else if (error.error && error.error.message) {
+          this.message = error.error.message;
+        }
+        // Priority 3: Fallback to generic status text
+        else {
+          this.message = `Transaction Failed (${error.statusText})`;
+        }
+
+        this.cdr.detectChanges();
       }
     });
   }

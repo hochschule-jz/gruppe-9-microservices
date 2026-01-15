@@ -1,0 +1,264 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+/* Container Layout */
+.manager-container {
+  display: flex;
+  gap: 2rem;
+  max-width: 1100px; /* Give it a bit more breathing room */
+  margin: 2rem auto;
+  padding: 0 1rem;   /* Prevent edge-touching on mobile */
+  flex-wrap: wrap;
+  align-items: flex-start; /* Align tops of cards */
+}
+
+/* Card Styling */
+.card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  flex: 1;
+  min-width: 350px;
+  transition: transform 0.2s ease;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+  font-size: 1.4rem;
+  border-bottom: 2px solid #f4f7f6;
+  padding-bottom: 15px;
+}
+
+/* --- FORM STYLES --- */
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Input Styling */
+input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  background-color: #fff;
+  border-color: #3498db;
+  box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+}
+
+input::placeholder {
+  color: #bdc3c7;
+}
+
+/* Button Styling */
+button {
+  width: 100%;
+  padding: 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- LIST STYLES --- */
+.list-container {
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* Scrollbar styling for the list */
+.list-container::-webkit-scrollbar {
+  width: 6px;
+}
+.list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.list-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+}
+
+.list-item:hover {
+  background-color: #fcfcfc;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.guest-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.contact {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.id {
+  font-size: 0.75rem;
+  font-family: 'Consolas', monospace;
+  color: #95a5a6;
+  background: #f4f6f7;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.empty-state {
+  text-align: center;
+  color: #95a5a6;
+  padding: 3rem;
+  font-style: italic;
+  border: 2px dashed #f0f0f0;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Ensures vertical centering */
+  padding: 15px 10px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background 0.2s;
+}
+
+/* Left Side Styles */
+.guest-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* Spacing between Name and Email */
+}
+
+.name {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.email {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Spacing between icon and text */
+}
+
+/* Style for when data is missing */
+.email.missing, .phone-badge.missing {
+  color: #bdc3c7;
+  font-style: italic;
+  font-weight: normal;
+}
+
+/* Right Side Styles (Phone) */
+.phone-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2c3e50;
+  background-color: #eef2f3;
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 100px; /* Ensures consistent width even for short numbers */
+  justify-content: center;
+}
+
+/* Override background for missing phone */
+.phone-badge.missing {
+  background-color: transparent;
+  border: 1px dashed #e0e0e0;
+}
+
+/* ... Keep existing styles ... */
+
+/* Wrapper to hold input + error message stacked */
+.input-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Red border when class.invalid is true */
+input.invalid {
+  border-color: #e74c3c;
+  background-color: #fdf2f2;
+}
+
+/* Shake animation or simple red text for error */
+.error-msg {
+  color: #e74c3c;
+  font-size: 0.75rem;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+/* Override default focus color if invalid */
+input.invalid:focus {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.1);
+}

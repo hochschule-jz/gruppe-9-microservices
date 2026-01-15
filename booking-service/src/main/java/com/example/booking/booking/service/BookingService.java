@@ -3,6 +3,7 @@ package com.example.booking.booking.service;
 import com.example.booking.booking.client.GuestClient;
 import com.example.booking.booking.client.RoomClient;
 import com.example.booking.booking.dto.BookingRequest;
+import com.example.booking.booking.dto.GuestResponse;
 import com.example.booking.booking.Booking;
 import com.example.booking.booking.BookingRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,8 @@ public class BookingService {
 
     public String createBooking(BookingRequest request) {
         // 1. VALIDATE GUEST (Read-only)
-        try {
-            guestClient.getGuest(request.getGuestId());
-        } catch (Exception e) {
+        var guest = guestClient.getGuest(request.getGuestId());
+        if (guest == null) {
             throw new RuntimeException("Guest not found: " + request.getGuestId());
         }
 
@@ -34,8 +34,8 @@ public class BookingService {
 
         try {
             // 3. PAYMENT (Mock External Payment Service)
-            // Simulating a failure for a specific guest ID (e.g., "999")
-            if ("999".equals(request.getGuestId())) {
+            // Simulating a failure for a specific guest lastName (e.g., "BadPayer")
+            if ("BadPayer".equalsIgnoreCase(guest.getLastName())) {
                 throw new RuntimeException("Payment Rejected: Insufficient Funds");
             }
 

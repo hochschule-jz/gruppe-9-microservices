@@ -1,5 +1,6 @@
 package com.example.booking.booking.client;
 
+import com.example.booking.booking.dto.GuestResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface GuestClient {
 
     @GetMapping("/guests/{id}")
-    Object getGuest(@PathVariable String id);
+    GuestResponse getGuest(@PathVariable String id);
 }

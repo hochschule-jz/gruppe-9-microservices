@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BookingComponent } from './components/booking/booking';
+import {RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, BookingComponent],
-  template: `<app-booking></app-booking>`,
+  imports: [CommonModule, RouterModule],
+  templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
-export class AppComponent {
-  title = 'booking-frontend';
-}
+export class AppComponent {}

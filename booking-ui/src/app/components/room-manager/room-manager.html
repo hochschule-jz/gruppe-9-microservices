@@ -1,0 +1,48 @@
+<div class="manager-container">
+  <div class="card form-card">
+    <h3>🛏️ Add New Room</h3>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Room Number</label>
+        <input [(ngModel)]="newRoom.roomNumber" placeholder="e.g. 101" />
+      </div>
+
+      <div class="form-group">
+        <label>Type</label>
+        <input [(ngModel)]="newRoom.type" placeholder="e.g. Deluxe Suite" />
+      </div>
+
+      <div class="form-group">
+        <label>Price Per Night</label>
+        <input type="number" [(ngModel)]="newRoom.pricePerNight" placeholder="0.00" />
+      </div>
+
+      <button (click)="addRoom()" [disabled]="!newRoom.roomNumber">Create Room</button>
+    </div>
+  </div>
+
+  <div class="card list-card">
+    <h3>Room Inventory</h3>
+    <div class="list-container">
+      <div class="list-header">
+        <span>Room</span>
+        <span>Status</span>
+      </div>
+
+      <div class="list-item" *ngFor="let room of rooms">
+        <div class="room-info">
+          <span class="room-number">#{{ room.roomNumber }}</span>
+          <span class="room-details">{{ room.type }} • ${{ room.pricePerNight }}</span>
+        </div>
+
+        <span class="status-badge" [class.booked]="!room.available">
+          {{ room.available ? 'Available' : 'Booked' }}
+        </span>
+      </div>
+
+      <div *ngIf="rooms.length === 0" class="empty-state">
+        No rooms in inventory.
+      </div>
+    </div>
+  </div>
+</div>

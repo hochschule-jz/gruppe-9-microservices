@@ -103,6 +103,17 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://mongodb-booking:27017/bookingdb
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-service:8761/eureka/
 
+  # ==========================================
+  # 4. FRONTEND
+  # ==========================================
+  booking-ui:
+    build: ./booking-ui
+    container_name: booking-ui
+    ports:
+      - "4200:80"
+    depends_on:
+      - api-gateway
+
 volumes:
   room-data:
   guest-data:

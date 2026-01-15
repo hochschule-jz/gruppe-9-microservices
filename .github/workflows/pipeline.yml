@@ -10,10 +10,11 @@ permissions:
   contents: read
   security-events: write
   actions: read
+# -----------------------------------------------------
 
 jobs:
   # ==========================================================
-  # JOB 1: BACKEND SERVICES
+  # JOB 1: BACKEND SERVICES (Matrix Strategy)
   # ==========================================================
   build-and-scan-backend:
     runs-on: ubuntu-latest
@@ -54,7 +55,7 @@ jobs:
             ${{ secrets.REGISTRY_USERNAME }}/${{ matrix.service }}:latest
             ${{ secrets.REGISTRY_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
 
-      # 4. Generate SBOM using Syft
+      # 4. Generate SBOM
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
@@ -62,7 +63,7 @@ jobs:
           format: spdx-json
           output-file: ${{ matrix.service }}-sbom.spdx.json
 
-      # 5. Scan SBOM for Vulnerabilities using Grype
+      # 5. Scan SBOM
       - name: Scan SBOM
         uses: anchore/scan-action@v3
         id: scan
@@ -71,17 +72,11 @@ jobs:
           fail-build: false
           severity-cutoff: high
 
+      # 6. Upload Results
       - name: Upload Anchore Scan Report
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v3
         with:
-            sarif_file: ${{ steps.scan.outputs.sarif }}
-
-      # Optional: Upload SBOM as artifact to inspect later
-      - name: Upload SBOM
-        uses: actions/upload-artifact@v4
-        with:
-          name: sbom-${{ matrix.service }}
-          path: ${{ matrix.service }}-sbom.spdx.json
+          sarif_file: ${{ steps.scan.outputs.sarif }}
 
   # ==========================================================
   # JOB 2: FRONTEND
@@ -101,7 +96,7 @@ jobs:
           password: ${{ secrets.REGISTRY_PASSWORD }}
 
       # 1. Build and Push
-      - name: Build and Push Frontend
+      - name: Build and Push UI
         uses: docker/build-push-action@v5
         with:
           context: ./booking-ui
@@ -121,7 +116,14 @@ jobs:
       # 3. Scan SBOM
       - name: Scan SBOM
         uses: anchore/scan-action@v3
+        id: scan-ui
         with:
           sbom: ui-sbom.spdx.json
           fail-build: false
           severity-cutoff: high
+
+      # 4. Upload Results
+      - name: Upload UI Scan Report
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ steps.scan-ui.outputs.sarif }}

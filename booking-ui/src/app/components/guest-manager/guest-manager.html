@@ -1,0 +1,90 @@
+<div class="manager-container">
+  <div class="card form-card">
+    <h3>👤 Add New Guest</h3>
+
+    <form #guestForm="ngForm">
+
+      <div class="form-grid">
+        <div class="form-row">
+          <div class="input-wrapper">
+            <input
+              [(ngModel)]="newGuest.firstName"
+              name="firstName"
+              placeholder="First Name"
+              required
+              #fname="ngModel"
+              [class.invalid]="fname.invalid && fname.touched"
+            />
+          </div>
+
+          <div class="input-wrapper">
+            <input
+              [(ngModel)]="newGuest.lastName"
+              name="lastName"
+              placeholder="Last Name"
+              required
+              #lname="ngModel"
+              [class.invalid]="lname.invalid && lname.touched"
+            />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-wrapper">
+            <input
+              [(ngModel)]="newGuest.email"
+              name="email"
+              placeholder="Email Address"
+              type="email"
+              required
+              email
+              #emailRef="ngModel"
+              [class.invalid]="emailRef.invalid && emailRef.touched"
+            />
+            <div *ngIf="emailRef.invalid && emailRef.touched" class="error-msg">
+              Invalid email format
+            </div>
+          </div>
+
+          <div class="input-wrapper">
+            <input
+              [(ngModel)]="newGuest.phoneNumber"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              type="tel"
+              required
+              pattern="^[0-9+\s()-]{7,15}$"  #phoneRef="ngModel"
+              [class.invalid]="phoneRef.invalid && phoneRef.touched"
+            />
+            <div *ngIf="phoneRef.invalid && phoneRef.touched" class="error-msg">
+              Invalid phone number
+            </div>
+          </div>
+        </div>
+
+        <button (click)="addGuest()" [disabled]="guestForm.invalid">
+          Register Guest
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="card list-card">
+    <h3>Guest Directory</h3>
+    <div class="list-container">
+      <div class="list-item" *ngFor="let guest of guests">
+        <div class="guest-info">
+          <span class="name">{{ guest.firstName }} {{ guest.lastName }}</span>
+          <span class="email" [class.missing]="!guest.email">
+            📧 {{ guest.email || 'No email provided' }}
+          </span>
+        </div>
+        <span class="phone-badge" [class.missing]="!guest.phoneNumber">
+          📞 {{ guest.phoneNumber || 'No Phone' }}
+        </span>
+      </div>
+      <div *ngIf="guests.length === 0" class="empty-state">No guests found.</div>
+    </div>
+  </div>
+</div>
